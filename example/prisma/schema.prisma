@@ -1,0 +1,46 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:root@localhost:3306/naxauth?schema=public"
+}
+
+enum UserStatus {
+  active
+  deactive
+  pending
+  trash
+}
+
+enum UserRoles {
+  admin
+  publisher
+  organization
+  counselor
+  student
+}
+
+enum UserGender {
+  male
+  female
+  other
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  firstname  String      @db.VarChar(255)
+  lastname   String?     @db.VarChar(255)
+  email      String?     @unique @db.VarChar(255)
+  phone      String?     @db.VarChar(20)
+  password   String      @db.VarChar(255)
+  status     UserStatus? @default(active)
+  photo      String?
+  role       UserRoles   @default(student)
+  created_at DateTime?   @default(now()) @db.Timestamp(0)
+  updated_at DateTime    @updatedAt
+
+  @@map("users")
+}
