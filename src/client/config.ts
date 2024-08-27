@@ -4,7 +4,7 @@ export let AUTH_CONFIG: AUTH_CONFIG_TYPE & {
     tokenName: string;
 }
 
-const NaxAuthConfig = (configs: AUTH_CONFIG_TYPE) => {
+const AuthConfig = (configs: AUTH_CONFIG_TYPE) => {
 
     AUTH_CONFIG = {
         tokenName: "authorization",
@@ -12,4 +12,4 @@ const NaxAuthConfig = (configs: AUTH_CONFIG_TYPE) => {
     }
 }
 
-export default NaxAuthConfig
+export default AuthConfig

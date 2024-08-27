@@ -10,13 +10,11 @@ export type SignupData = {
 const signup = async (data: SignupData) => {
     Event.emit("requestStart", "signup")
     const { info } = await request("signup", data)
-    let _data: any;
     if (info.data) {
         Event.emit("signup", info.data)
-        _data = info.data
     }
     Event.emit("requestEnd", "signup")
-    return _data
+    return info
 }
 
 export default signup

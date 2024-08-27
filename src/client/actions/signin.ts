@@ -16,6 +16,7 @@ const signin = async (data: SigninData) => {
         Event.emit("signin", info.data)
     }
     Event.emit("requestEnd", "signin", info)
+    return info
 }
 
 export default signin

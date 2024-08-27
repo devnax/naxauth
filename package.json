@@ -1,14 +1,10 @@
 {
   "name": "naxauth",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "Auth manager for nodejs with client",
   "type": "module",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "npx tsc",
-    "prepare": "npm run build"
+    "build": "npx tsc && npx cpx \"{package.json,README.md}\" dist"
   },
   "keywords": [],
   "author": "Naxrul Ahmed",

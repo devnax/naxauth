@@ -14,14 +14,15 @@ export type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType>({
     data: null,
-    loading: false
+    loading: true
 })
-AuthContext.displayName = "AuthContext"
+
+AuthContext.displayName = "NaxAuthContext"
 
 const AuthProvider = ({ children }: { children: any }) => {
     const [auth, setAuth] = useState({
         data: null,
-        loading: false
+        loading: true
     })
 
     const requestStart = (type: string) => {

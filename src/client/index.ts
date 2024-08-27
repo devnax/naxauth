@@ -1,4 +1,4 @@
-import NaxAuthConfig from "./config";
+import AuthConfig from "./config";
 import getAuth from "./actions/getAuth";
 import signin from "./actions/signin";
 import signout from "./actions/signout";
@@ -9,7 +9,7 @@ import getAuthToken from "./actions/getAuthToken";
 import Event from "./utils/Event";
 
 const Auth = {
-    NaxAuthConfig,
+    AuthConfig,
     signin,
     getAuth,
     signout,
