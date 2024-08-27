@@ -34,12 +34,12 @@ const getAuth = async (req: any) => {
 
         const user: any = await getUserData(payload.email)
         if (!user) throw new Error("Invalid token");
-
-        const authData = getAuthData ? await getAuthData({ user, requestData }) : {
+        const defAuthData = {
             name: user.name,
             email: user.email,
             photo: user.photo
         }
+        const authData = getAuthData ? { ...defAuthData, ...await getAuthData({ user, requestData }) } : defAuthData
 
         info.data = authData
         if (refreshToken) {

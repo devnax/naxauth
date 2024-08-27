@@ -1,4 +1,4 @@
-import { NaxAuthConfig } from "./config"
+import AuthConfig from "./config"
 import signin from "./actions/signin"
 import signup from "./actions/signup"
 import verify from "./actions/verify"
@@ -8,8 +8,8 @@ import resetPassword from "./actions/resetPassword"
 import useAuth from "./hooks/useAuth"
 import AuthHandler from "./AuthHandler"
 
-export {
-    NaxAuthConfig,
+const Auth = {
+    AuthConfig,
     getAuth,
     signin,
     signup,
@@ -19,3 +19,5 @@ export {
     useAuth,
     AuthHandler
 }
+
+export default Auth

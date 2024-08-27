@@ -11,7 +11,7 @@ type AUTH_CONFIG_TYPE = NaxAuthConfigProps<UserData<TO>, RequestData<TO>> & {
 
 export let AUTH_CONFIG: AUTH_CONFIG_TYPE;
 
-export const NaxAuthConfig = <U, Req>(configs: NaxAuthConfigProps<U, Req>) => {
+const AuthConfig = <U, Req>(configs: NaxAuthConfigProps<U, Req>) => {
     AUTH_CONFIG = {
         secret: Math.random().toString(32),
         emailField: "email",
@@ -25,3 +25,5 @@ export const NaxAuthConfig = <U, Req>(configs: NaxAuthConfigProps<U, Req>) => {
         AUTH_CONFIG.transporter = nodemailer.createTransport(mail)
     }
 }
+
+export default AuthConfig
