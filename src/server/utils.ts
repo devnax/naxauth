@@ -102,12 +102,12 @@ export const jwt = {
             secret,
             jwtConfig
         } = AUTH_CONFIG
-        let _1hr = 1000 * 60 * 60
-        let expires = expiresIn || jwtConfig?.expiresIn || _1hr
+        let _1day = 1000 * 60 * 60 * 24
+        let expires = expiresIn || jwtConfig?.expiresIn || _1day
 
         return _jwt.sign(payload, secret, { ...jwtConfig, expiresIn: expires })
     },
-    verify: (token: string, getPayload?: boolean) => {
+    verify: (token: string) => {
         try {
             return _jwt.verify(token, AUTH_CONFIG.secret) as TO
         } catch (error) {

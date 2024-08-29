@@ -2,7 +2,7 @@ import { AUTH_CONFIG } from "../config";
 import Event from "./Event";
 import Token from "./Token";
 
-const request = async (type: "getAuth" | "signin" | "signup" | "verify" | "forgotPassword" | "resetPassword", data?: Object) => {
+const request = async (type: "getAuth" | "signin" | "signup" | "update" | "verify" | "forgotPassword" | "resetPassword", data?: Object) => {
     const { fetch: goobalFetch, baseUrl, actions, tokenName, tokenPlacement } = AUTH_CONFIG
     let { path, fetch: _fetch, onRequestStart, onRequestEnd, onError, onSuccess } = (actions || {} as any)[type]
 

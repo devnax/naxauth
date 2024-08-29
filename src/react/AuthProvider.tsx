@@ -40,7 +40,7 @@ const AuthProvider = ({ children }: { children: any }) => {
                 data: info?.data,
                 loading: false
             })
-        } else if (type === 'signin' && info.data) {
+        } else if (['signin', 'update'].includes(type) && info.data) {
             Auth.getAuth()
         }
     }

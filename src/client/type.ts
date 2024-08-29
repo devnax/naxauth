@@ -24,6 +24,7 @@ export interface AUTH_CONFIG_TYPE {
         getAuth?: ActionType,
         signin?: ActionType,
         signup?: ActionType,
+        update?: ActionType,
         verify?: ActionType,
         forgotPassword?: ActionType,
         resetPassword?: ActionType

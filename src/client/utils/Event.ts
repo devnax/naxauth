@@ -3,6 +3,7 @@ export type EventNames =
     "getAuth" |
     "signin" |
     "signup" |
+    "update" |
     "signout" |
     "verify" |
     "forgotPassword" |
