@@ -63,19 +63,20 @@ export interface NaxAuthConfigProps<User, Req> {
                 options?: MailOptions;
             }>
         },
-        update?: {
-            emailNotification?: boolean,
-            messages?: { [type in "notFound" | "success"]: string };
-            updateUser: (ctx: UserAndReqData<User> & { hashPassword: string | null }) => Promise<UserData<User>>;
+        verify?: {
+            emailNotification?: boolean;
+            messages?: { [type in "exists" | "invalid" | "success"]: string };
+            updateUser: (ctx: { user: User, requestData: RequestData<User> }) => Promise<void>;
+            isVerified: (ctx: UserAndReqData<User>) => Promise<boolean>;
             mail?: (ctx: UserAndReqData<User> & { templateData: EmailTemplateData }) => Promise<{
                 data?: Partial<EmailTemplateData>,
                 options?: MailOptions;
             }>
         },
-        verify?: {
-            emailNotification?: boolean;
-            messages?: { [type in "exists" | "invalid" | "success"]: string };
-            updateUser: (ctx: { user: User, requestData: RequestData<User> }) => Promise<void>;
+        update?: {
+            emailNotification?: boolean,
+            messages?: { [type in "notFound" | "success"]: string };
+            updateUser: (ctx: UserAndReqData<User> & { hashPassword: string | null }) => Promise<UserData<User>>;
             mail?: (ctx: UserAndReqData<User> & { templateData: EmailTemplateData }) => Promise<{
                 data?: Partial<EmailTemplateData>,
                 options?: MailOptions;

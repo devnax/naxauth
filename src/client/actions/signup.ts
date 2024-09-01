@@ -10,8 +10,8 @@ export type SignupData = {
 const signup = async (data: SignupData) => {
     Event.emit("requestStart", "signup")
     const { info } = await request("signup", data)
-    if (info.data) {
-        Event.emit("signup", info.data)
+    if (info.status === 200) {
+        Event.emit("signup", info)
     }
     Event.emit("requestEnd", "signup")
     return info

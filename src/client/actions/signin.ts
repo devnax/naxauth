@@ -11,9 +11,9 @@ export type SigninData = {
 const signin = async (data: SigninData) => {
     Event.emit("requestStart", "signin")
     const { info } = await request("signin", data)
-    if (info.data) {
+    if (info.status) {
         Token.set(info.data.token)
-        Event.emit("signin", info.data)
+        Event.emit("signin", info)
     }
     Event.emit("requestEnd", "signin", info)
     return info

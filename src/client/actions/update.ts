@@ -9,8 +9,8 @@ export type UpdateData = {
 const update = async (data: UpdateData) => {
     Event.emit("requestStart", "update")
     const { info } = await request("update", data)
-    if (info.data) {
-        Event.emit("update", info.data)
+    if (info.status === 200) {
+        Event.emit("update", info)
     }
     Event.emit("requestEnd", "update")
     return info

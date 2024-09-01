@@ -31,12 +31,16 @@ const verify = async (req: any) => {
         }
         if (!requestData.body.token) throw new Error("Token required in getRequestData body");
 
-        const { emailNotification, updateUser, messages, mail } = actions.verify
+        const { emailNotification, updateUser, isVerified, messages, mail } = actions.verify
 
         let payload: TO = jwt.verify(requestData.body.token);
 
         const user = await getUserData(payload.email)
         if (!user) throw new Error(messages ? messages["invalid"] : "Invalid token")
+
+        if (await isVerified({ requestData, user })) {
+            throw new Error("Invalid verification token");
+        }
 
         await updateUser({ user, requestData })
         info.message = messages ? messages["success"] : "successfully verify"

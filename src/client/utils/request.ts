@@ -23,10 +23,10 @@ const request = async (type: "getAuth" | "signin" | "signup" | "update" | "verif
     onRequestStart && onRequestStart()
 
     const res = await fetch(`${baseUrl}${path || ""}`, opt)
-    let info: { message: string, data: any } = await res.json();
+    let info: { message: string, data: any, status: number } = await res.json();
 
     onRequestEnd && onRequestEnd(res)
-
+    info.status = res.status
 
     if (res.status === 200) {
         Event.emit("success", type, info)

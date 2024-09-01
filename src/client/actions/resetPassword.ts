@@ -9,8 +9,8 @@ type ResetPasswordData = {
 const resetPassword = async (data: ResetPasswordData) => {
     Event.emit("requestStart", "resetPassword")
     const { info } = await request("resetPassword", data)
-    if (info.data) {
-        Event.emit("resetPassword", info.data)
+    if (info.status === 200) {
+        Event.emit("resetPassword", info)
     }
     Event.emit("requestEnd", "resetPassword")
     return info

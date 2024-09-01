@@ -6,12 +6,12 @@ import signout from "./signout";
 const getAuth = async () => {
     Event.emit("requestStart", "getAuth")
     const { info } = await request("getAuth")
-    if (info.data) {
+    if (info.status === 200) {
         if (info.data.refreshToken) {
             Token.set(info.data.refreshToken)
             delete info.data.refreshToken
         }
-        Event.emit("getAuth", info.data)
+        Event.emit("getAuth", info)
     } else {
         signout()
     }
