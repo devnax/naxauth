@@ -3,8 +3,6 @@ import request from "../utils/request";
 import Event from "../utils/Event";
 import signout from "./signout";
 
-
-
 const getAuth = async () => {
     Event.emit("requestStart", "getAuth")
     const { info } = await request("getAuth")

@@ -3,6 +3,7 @@ import getAuth from "./actions/getAuth";
 import signin from "./actions/signin";
 import signout from "./actions/signout";
 import signup from "./actions/signup";
+import verify from "./actions/verify";
 import forgotPassword from "./actions/forgotPassword";
 import resetPassword from "./actions/resetPassword";
 import getAuthToken from "./actions/getAuthToken";
@@ -14,6 +15,7 @@ const Auth = {
     getAuth,
     signout,
     signup,
+    verify,
     forgotPassword,
     resetPassword,
     getAuthToken,
