@@ -42,6 +42,7 @@ export interface NaxAuthConfigProps<User, Req> {
             emailNotification?: boolean;
             expiresIn?: number;
             messages?: { [type in "wrongEmail" | "wrongPassword" | "success"]: string };
+            checkUser?: (ctx: UserAndReqData<User>) => Promise<void>;
             mail?: (ctx: UserAndReqData<User> & { templateData: EmailTemplateData }) => Promise<{
                 data?: Partial<EmailTemplateData>,
                 options?: MailOptions;
@@ -55,6 +56,7 @@ export interface NaxAuthConfigProps<User, Req> {
                 url: string;
                 text?: string;
             };
+            isVerified?: (ctx: UserAndReqData<User>) => Promise<boolean>;
             createUser: (ctx: { requestData: RequestData<User>, hashPassword: string }) => Promise<UserData<User>>;
             mail?: (ctx: UserAndReqData<User> & { templateData: EmailTemplateData }) => Promise<{
                 data?: Partial<EmailTemplateData>,

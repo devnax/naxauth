@@ -3,19 +3,9 @@
 
 ```js
 
-import {
-    NaxAuthConfig,
-    getAuth,
-    signin,
-    signup,
-    verify,
-    forgotPassword,
-    resetPassword,
-    useAuth,
-    AuthHandler
-} from 'naxauth/server'
+import Auth from 'naxauth/server'
 
-NaxAuthConfig({
+Auth.AuthConfig({
     secret: process.env.APP_SECRET,
     brandName: "Your Brand Name",
     mailConfig: {
@@ -93,16 +83,16 @@ NaxAuthConfig({
 })
 
 app.post("/auth", async (req, res)=> {
-    const {data, message, status} = await getAuth(req)
-    const {data, message, status} = await signin(req)
-    const {data, message, status} = await signup(req)
-    const {data, message, status} = await verify(req)
-    const {data, message, status} = await forgotPassword(req)
-    const {data, message, status} = await resetPassword(req)
-    const {data, message, status} = await useAuth(req)
+    const {data, message, status} = await Auth.getAuth(req)
+    const {data, message, status} = await Auth.signin(req)
+    const {data, message, status} = await Auth.signup(req)
+    const {data, message, status} = await Auth.verify(req)
+    const {data, message, status} = await Auth.forgotPassword(req)
+    const {data, message, status} = await Auth.resetPassword(req)
+    const {data, message, status} = await Auth.useAuth(req)
 
     const type = req.headers['request-type']
-    const {data, message, status} = await  AuthHandler(type, req)
+    const {data, message, status} = await  Auth.AuthHandler(type, req)
 
     res.status(status).json({data, message})
 })
@@ -114,6 +104,30 @@ app.post("/auth", async (req, res)=> {
 ## Server configs reference
 
 ```js
+import { SignOptions } from "jsonwebtoken";
+import { MailOptions } from "nodemailer/lib/json-transport";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
+import { EmailTemplateData } from "./emailTemplate";
+
+export type TO = { [key: string]: any }
+export type UserData<User> = Omit<User, "name" | "email" | "password" | "photo"> & {
+    name: string;
+    email: string;
+    password: string;
+    photo?: string;
+}
+export type RequestData<User> = {
+    authToken: string;
+    userAgent: string;
+    body: Partial<Omit<User, "email" | "password" | "token">> & {
+        email?: string;
+        password?: string;
+        token?: string;
+    };
+}
+
+type UserAndReqData<User> = { user: User, requestData: RequestData<User> }
+
 import { SignOptions } from "jsonwebtoken";
 import { MailOptions } from "nodemailer/lib/json-transport";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
@@ -158,6 +172,7 @@ export interface NaxAuthConfigProps<User, Req> {
             emailNotification?: boolean;
             expiresIn?: number;
             messages?: { [type in "wrongEmail" | "wrongPassword" | "success"]: string };
+            checkUser?: (ctx: UserAndReqData<User>) => Promise<void>;
             mail?: (ctx: UserAndReqData<User> & { templateData: EmailTemplateData }) => Promise<{
                 data?: Partial<EmailTemplateData>,
                 options?: MailOptions;
@@ -171,7 +186,17 @@ export interface NaxAuthConfigProps<User, Req> {
                 url: string;
                 text?: string;
             };
+            isVerified?: (ctx: UserAndReqData<User>) => Promise<boolean>;
             createUser: (ctx: { requestData: RequestData<User>, hashPassword: string }) => Promise<UserData<User>>;
+            mail?: (ctx: UserAndReqData<User> & { templateData: EmailTemplateData }) => Promise<{
+                data?: Partial<EmailTemplateData>,
+                options?: MailOptions;
+            }>
+        },
+        update?: {
+            emailNotification?: boolean,
+            messages?: { [type in "notFound" | "success"]: string };
+            updateUser: (ctx: UserAndReqData<User> & { hashPassword: string | null }) => Promise<UserData<User>>;
             mail?: (ctx: UserAndReqData<User> & { templateData: EmailTemplateData }) => Promise<{
                 data?: Partial<EmailTemplateData>,
                 options?: MailOptions;

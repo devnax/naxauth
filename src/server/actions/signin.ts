@@ -33,9 +33,10 @@ const signin = async (req: any) => {
 
         const user = await getUserData(requestData.body.email)
 
+        let { messages, checkUser, emailNotification, mail } = actions.signin;
         if (!user) throw new Error("User not found");
         if (!Hash.compare(requestData.body.password, user.password)) throw new Error("Wrong password");
-        let { messages, emailNotification, mail } = actions.signin;
+        checkUser && await checkUser({ requestData, user })
         const date = new Date();
         info.data = {
             token: generateSigninToken(user.email)

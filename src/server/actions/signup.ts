@@ -41,15 +41,32 @@ const signup = async (req: any) => {
             messages,
             action,
             createUser,
+            isVerified,
             mail
         } = actions.signup
 
-        if (mailType === 'verificaion' && !action?.url) throw new Error("Verification action url required, please configure verification prop");
+        if (mailType === 'verificaion') {
+            if (!action?.url) throw new Error("Verification action url required, please configure verification prop");
+            if (!isVerified) throw new Error("isVerified callback required for signup");
+        }
 
-        if (exists) throw new Error(messages ? messages["exists"] : "User already exists");
+        let verified = isVerified && await isVerified({ requestData, user: exists })
+        let user;
+        if (exists) {
+            if (mailType === 'verificaion') {
+                if (verified) {
+                    throw new Error(messages ? messages["exists"] : "User already exists");
+                }
+            } else {
+                throw new Error(messages ? messages["exists"] : "User already exists");
+            }
+            user = exists
+            info.message = "Verification mail sent"
+        } else {
+            user = await createUser({ requestData, hashPassword: Hash.make(requestData.body.password) })
+            info.message = messages ? messages["success"] : "Successfully singup"
+        }
 
-        let user = await createUser({ requestData, hashPassword: Hash.make(requestData.body.password) })
-        info.message = messages ? messages["success"] : "Successfully singup"
 
         info.data = {
             name: user.name,
