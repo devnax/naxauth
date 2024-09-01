@@ -126,11 +126,11 @@ export const generateSigninToken = (email: string) => {
     if (!actions?.signin) throw new Error("Invalid request")
     let { expiresIn } = actions.signin;
     const date = new Date();
-    let _1hr = 1000 * 60 * 60
-    let expires = expiresIn || jwtConfig?.expiresIn || _1hr
+    let _1day = 1000 * 60 * 60 * 24
+    let expires = expiresIn || jwtConfig?.expiresIn || _1day
 
     return jwt.sign({
         email,
-        refreshIn: date.getTime() + expires + _1hr
+        refreshIn: date.getTime() + expires + _1day
     }, expires)
 }

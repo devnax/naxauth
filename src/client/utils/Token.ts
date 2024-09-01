@@ -22,7 +22,7 @@ const Token = {
             localStorage.setItem(tokenName, value)
         } else {
             const date = new Date();
-            date.setTime(date.getTime() + (1000 * 60 * 60 * 24) * 2); // 2 days
+            date.setTime(date.getTime() + (1000 * 60 * 60 * 24) * 1); // 1 days
             let expires = "; expires=" + date.toUTCString();
             document.cookie = tokenName + "=" + (value || "") + expires + ";SameSite=lax; path=/"
         }

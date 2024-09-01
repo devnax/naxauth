@@ -1,6 +1,7 @@
 import Token from "../utils/Token";
 import request from "../utils/request";
 import Event from "../utils/Event";
+import signout from "./signout";
 
 
 
@@ -13,6 +14,8 @@ const getAuth = async () => {
             delete info.data.refreshToken
         }
         Event.emit("getAuth", info.data)
+    } else {
+        signout()
     }
     Event.emit("requestEnd", "getAuth", info)
     return info
