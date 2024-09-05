@@ -1,12 +1,12 @@
 import { AUTH_CONFIG } from "../config";
-import { TO } from "../type";
-import { decodeJwt, generateSigninToken, jwt } from "../utils";
+import { generateSigninToken, jwt } from "../utils";
 
 const getAuth = async (req: any) => {
     const {
         getRequestData,
         getUserData,
-        getAuthData
+        getAuthData,
+        actions
     } = AUTH_CONFIG
 
     const info = {
@@ -18,17 +18,27 @@ const getAuth = async (req: any) => {
     try {
         const requestData = await getRequestData(req)
         if (!requestData.authToken) throw new Error("please login first");
+
         let payload: any;
         let refreshToken: any;
         try {
             payload = jwt.verify(requestData.authToken);
-        } catch (error) {
-            payload = decodeJwt(requestData.authToken)
+        } catch (error: any) {
+            payload = jwt.decode(requestData.authToken)
             const date = new Date();
-            if (payload.refreshIn && payload.refreshIn > date.getTime()) {
-                refreshToken = generateSigninToken(payload.email)
+            if (payload.refreshIn && parseInt(payload.refreshIn) > date.getTime()) {
+                let _payload = {}
+                if (actions?.signin?.getPayload) {
+                    const user: any = await getUserData(payload.email)
+                    if (!user) throw new Error("Invalid token");
+                    _payload = await actions.signin.getPayload({ requestData, user })
+                }
+                refreshToken = generateSigninToken({
+                    ..._payload,
+                    email: payload.email
+                })
             } else {
-                throw new Error("Token expired");
+                throw new Error(error.message);
             }
         }
 

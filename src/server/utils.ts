@@ -9,11 +9,6 @@ export const Hash = {
     compare: (str: string, hash_str: string) => sha1(str) === hash_str,
 }
 
-export const throwErr = (condition: any, message: string) => {
-    if (condition) throw new Error(message)
-}
-
-
 export const getFormattedDate = () => {
     const date = new Date();
     const year = date.getFullYear();
@@ -81,21 +76,6 @@ export const parseUserAgent = (ua: string) => {
 }
 
 
-
-export const decodeJwt = (token: string) => {
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-        throw new Error('Invalid JWT format');
-    }
-    const base64Url = parts[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(jsonPayload);
-}
-
-
 export const jwt = {
     sign: (payload: TO, expiresIn?: number) => {
         const {
@@ -113,11 +93,12 @@ export const jwt = {
         } catch (error) {
             throw new Error("Token expired");
         }
-    }
+    },
+    decode: _jwt.decode
 }
 
 
-export const generateSigninToken = (email: string) => {
+export const generateSigninToken = (payload: object) => {
     const {
         jwtConfig,
         actions,
@@ -130,7 +111,7 @@ export const generateSigninToken = (email: string) => {
     let expires = expiresIn || jwtConfig?.expiresIn || _1day
 
     return jwt.sign({
-        email,
+        ...payload,
         refreshIn: date.getTime() + expires + _1day
     }, expires)
 }

@@ -8,6 +8,7 @@ import forgotPassword from "./actions/forgotPassword"
 import resetPassword from "./actions/resetPassword"
 import useAuth from "./hooks/useAuth"
 import AuthHandler from "./AuthHandler"
+import { Hash } from './utils'
 
 const Auth = {
     AuthConfig,
@@ -19,7 +20,8 @@ const Auth = {
     forgotPassword,
     resetPassword,
     useAuth,
-    AuthHandler
+    AuthHandler,
+    Hash
 }
 
 export default Auth

@@ -43,6 +43,7 @@ export interface NaxAuthConfigProps<User, Req> {
             expiresIn?: number;
             messages?: { [type in "wrongEmail" | "wrongPassword" | "success"]: string };
             checkUser?: (ctx: UserAndReqData<User>) => Promise<void>;
+            getPayload?: (ctx: UserAndReqData<User>) => Promise<object>
             mail?: (ctx: UserAndReqData<User> & { templateData: EmailTemplateData }) => Promise<{
                 data?: Partial<EmailTemplateData>,
                 options?: MailOptions;
