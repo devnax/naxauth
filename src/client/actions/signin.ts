@@ -11,7 +11,7 @@ export type SigninData = {
 const signin = async (data: SigninData) => {
     Event.emit("requestStart", "signin")
     const { info } = await request("signin", data)
-    if (info.status) {
+    if (info.status === 200) {
         Token.set(info.data.token)
         Event.emit("signin", info)
     }
