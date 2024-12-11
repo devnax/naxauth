@@ -50,6 +50,7 @@ export interface NaxAuthConfigProps<User, Req> {
             }>
         },
         signup?: {
+            adminNotifyEmail?: string;
             mailType?: "verificaion" | "normal",
             expiresLinkIn?: number;
             messages?: { [type in "exists" | "invalidPassword" | "success"]: string };

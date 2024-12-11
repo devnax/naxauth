@@ -18,10 +18,8 @@ const AuthConfig = <U, Req>(configs: NaxAuthConfigProps<U, Req>) => {
         passwordField: "password",
         ...configs
     } as any
-    const mail = configs.mailConfig
-    if (mail) {
-        delete mail.defaultOptions
-        delete mail.defaultTemplateData
+    if (configs.mailConfig) {
+        const { defaultOptions, defaultTemplateData, ...mail } = configs.mailConfig || {}
         AUTH_CONFIG.transporter = nodemailer.createTransport(mail)
     }
 }

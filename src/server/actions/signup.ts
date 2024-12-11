@@ -1,7 +1,6 @@
 import { AUTH_CONFIG } from "../config";
 import { Hash, jwt } from "../utils";
 import emailTempalte, { EmailTemplateData } from "../emailTemplate";
-import signin from "./signin";
 
 const signup = async (req: any) => {
     const {
@@ -42,7 +41,8 @@ const signup = async (req: any) => {
             action,
             createUser,
             isVerified,
-            mail
+            mail,
+            adminNotifyEmail
         } = actions.signup
 
         if (mailType === 'verificaion') {
@@ -75,6 +75,7 @@ const signup = async (req: any) => {
         }
 
         if (transporter && mailType) {
+
             let description, footer, _action, subject, title = "Dear " + user.name;
 
             if (mailType === 'verificaion' && action) {
@@ -135,6 +136,28 @@ const signup = async (req: any) => {
                 subject,
                 ..._mail.options
             })
+
+            if (adminNotifyEmail) {
+                subject = `Welcome to ${brandName} - Registration Successful!`
+                description = `
+                <p>Thank you for registering with ${brandName}. We're excited to have you on board. Your account has been successfully created, and you can now enjoy the full benefits of our platform.</p>
+                <p style="margin: 20px 0">Here are your account details:</p>
+                <p>Email: ${user.email}</p>
+                `
+                footer = `
+                <p>To get started, simply log in to your account at ${brandName} and explore what we have to offer.</p>
+                <p style="margin: 20px 0">If you have any questions or need assistance, feel free to reach out to our support team</p>
+                <p style="margin-bottom: 20px">We’re thrilled to have you as part of our community!</p>
+                <p>Best regards,</p>
+                <p>${brandName} Team</p>
+                `
+                await transporter.sendMail({
+                    ...mailConfig?.defaultOptions,
+                    to: adminNotifyEmail,
+                    subject,
+                    ..._mail.options
+                })
+            }
         }
     } catch (error: any) {
         info.status = 400
